@@ -2,6 +2,7 @@
 
 namespace WFHWeb.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web;
 
@@ -38,11 +39,21 @@ namespace WFHWeb.Controllers
         [Route("")]
         public IHttpActionResult GetStatuses()
         {
-            return this.Ok(StatusService.Instance.GetAllStatuses(this.dataDir).Select(ToUserStatusInfo).ToList());
+            IList<WorkingStatusData> currentWorkingStatuses = StatusService.Instance.GetAllStatuses(this.dataDir);
+            IList<WorkingStatusData> defaultWorkingStatuses = StatusService.Instance.GetAllStatuses(this.dataDir, true);
+
+            return this.Ok(ToUserStatusInfo(currentWorkingStatuses, defaultWorkingStatuses));
         }
 
-        public static UserStatusInfo ToUserStatusInfo(WorkingStatusData workingStatusData)
+        private static List<UserStatusInfo> ToUserStatusInfo(IEnumerable<WorkingStatusData> currentWorkingStatuses, IEnumerable<WorkingStatusData> defaultWorkingStatuses)
         {
+            return currentWorkingStatuses.Select(ws => ToUserStatusInfo(ws, defaultWorkingStatuses)).ToList();
+        }
+
+        private static UserStatusInfo ToUserStatusInfo(WorkingStatusData workingStatusData, IEnumerable<WorkingStatusData> defaultWorkingStatuses)
+        {
+            var defaultWorkingStatus = defaultWorkingStatuses.SingleOrDefault(ws => ws.Email == workingStatusData.Email);
+            bool isDefault = defaultWorkingStatus != null && defaultWorkingStatus.StatusType == workingStatusData.StatusType;
             return new UserStatusInfo
             {
                 Email = workingStatusData.Email,
@@ -50,11 +61,11 @@ namespace WFHWeb.Controllers
                 {
                     StatusType = workingStatusData.StatusType,
                     StatusDetails = workingStatusData.StatusDetails,
-                    InOffice = workingStatusData.StatusType == StatusType.WorkInOffice
+                    InOffice = workingStatusData.StatusType == StatusType.WorkInOffice,
+                    Default = isDefault
                 }
             };
         }
-
 
         [HttpPost]
         [Route("Slack")]
