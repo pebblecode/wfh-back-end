@@ -8,7 +8,6 @@ using System.Linq;
 using System.Web;
 using WFHWeb;
 
-[assembly: OwinStartup(typeof(Startup))]
 namespace WFHWeb
 {
     public class Startup
