@@ -7,11 +7,14 @@ using System.Web.Routing;
 
 namespace WFHWeb
 {
+    using WFHWeb.App_Start;
+
     public class WebApiApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configure(GlobalConfig.ConfigJson);
         }
     }
 }
