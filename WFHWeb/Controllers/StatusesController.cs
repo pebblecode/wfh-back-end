@@ -78,7 +78,7 @@ namespace WFHWeb.Controllers
         public async Task<IHttpActionResult> SetStatusFromSlack()
         {
             // this is simon's token :)
-            var token = "xoxp-2165237499-2607133545-4790338792-f5ac10";
+            var token = ConfigurationManager.AppSettings["SlackToken"];
             var foo = await this.Request.Content.ReadAsStringAsync();
             var slackData = HttpUtility.ParseQueryString(foo);
             var userid = slackData["user_id"];
