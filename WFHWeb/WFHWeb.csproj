@@ -110,6 +110,7 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="index.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="App_Data\default.json" />
