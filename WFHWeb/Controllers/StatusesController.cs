@@ -3,6 +3,8 @@ using System.Web.Http;
 
 namespace WFHWeb.Controllers
 {
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -84,7 +86,11 @@ namespace WFHWeb.Controllers
             var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("https://slack.com/api/");
             var response = await httpClient.GetAsync(string.Format("users.info?token={0}&&user={1}", token, userid));
-            var jsonBlob = await response.Content.ReadAsStringAsync();
+            var jsonBlob = JObject.Parse(await response.Content.ReadAsStringAsync());
+            var email = (string)jsonBlob["user"]["profile"]["email"];
+            
+            this.SetStatus(StatusType.WorkOutOfOffice, new UserStatus { Email = email });
+
 
             return Ok(jsonBlob);
         }
