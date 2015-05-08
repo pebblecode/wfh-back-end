@@ -46,15 +46,17 @@ namespace WFHWeb.Controllers
             return this.Ok(ToUserStatusInfo(currentWorkingStatuses, defaultWorkingStatuses));
         }
 
-        private static List<UserStatusInfo> ToUserStatusInfo(IEnumerable<WorkingStatusData> currentWorkingStatuses, IEnumerable<WorkingStatusData> defaultWorkingStatuses)
+        private static List<UserStatusInfo> ToUserStatusInfo(IList<WorkingStatusData> currentWorkingStatuses, IEnumerable<WorkingStatusData> defaultWorkingStatuses)
         {
-            return currentWorkingStatuses.Select(ws => ToUserStatusInfo(ws, defaultWorkingStatuses)).ToList();
+            var updatedUsers = currentWorkingStatuses.Select(ws => ws.Email).ToList();
+            List<UserStatusInfo> userStatusInfos = currentWorkingStatuses.Select(ws => ToUserStatusInfo(ws, false)).ToList();
+            userStatusInfos.AddRange(defaultWorkingStatuses.Where(ws => !updatedUsers.Contains(ws.Email)).Select(ws => ToUserStatusInfo(ws, true)));
+
+            return userStatusInfos;
         }
 
-        private static UserStatusInfo ToUserStatusInfo(WorkingStatusData workingStatusData, IEnumerable<WorkingStatusData> defaultWorkingStatuses)
+        private static UserStatusInfo ToUserStatusInfo(WorkingStatusData workingStatusData, bool isDefault)
         {
-            var defaultWorkingStatus = defaultWorkingStatuses.SingleOrDefault(ws => ws.Email == workingStatusData.Email);
-            bool isDefault = defaultWorkingStatus != null && defaultWorkingStatus.StatusType == workingStatusData.StatusType;
             return new UserStatusInfo
             {
                 Email = workingStatusData.Email,
