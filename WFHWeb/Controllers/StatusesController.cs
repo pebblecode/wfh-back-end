@@ -8,7 +8,7 @@ using System.Data.SQLite;
 
 namespace WFHWeb.Controllers
 {
-    [RoutePrefix("/api/statuses")]
+    [RoutePrefix("api/statuses")]
     public class StatusesController : ApiController
     {
         [HttpPost]
@@ -20,7 +20,7 @@ namespace WFHWeb.Controllers
 
 
         [HttpPost]
-        [Route("{Slack}")]
+        [Route("Slack")]
         public IHttpActionResult SetStatusFromSlack([FromBody] string slackData)
         {
             //Get Slack info
