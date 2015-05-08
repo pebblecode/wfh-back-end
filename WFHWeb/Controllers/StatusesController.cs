@@ -12,6 +12,7 @@ namespace WFHWeb.Controllers
     using System.Net.Http;
     using System.Web;
     using WFHWeb.DataModels;
+    using WFHWeb.Hubs;
     using WFHWeb.Models;
     using WFHWeb.Services;
 
@@ -36,6 +37,7 @@ namespace WFHWeb.Controllers
                 StatusDetails = userStatus.StatusDetails
             };
             StatusService.Instance.SetStatus(this.dataDir, workingStatusData);
+            NotificationHub.NotifyUsers(GetUserStatusInfo());
 
             return this.Ok();
         }
@@ -44,10 +46,15 @@ namespace WFHWeb.Controllers
         [Route("")]
         public IHttpActionResult GetStatuses()
         {
+            return Ok(GetUserStatusInfo());
+        }
+
+        private List<UserStatusInfo> GetUserStatusInfo()
+        {
             IList<WorkingStatusData> currentWorkingStatuses = StatusService.Instance.GetAllStatuses(this.dataDir);
             IList<WorkingStatusData> defaultWorkingStatuses = StatusService.Instance.GetAllStatuses(this.dataDir, true);
 
-            return this.Ok(ToUserStatusInfo(currentWorkingStatuses, defaultWorkingStatuses));
+            return ToUserStatusInfo(currentWorkingStatuses, defaultWorkingStatuses);
         }
 
         private static List<UserStatusInfo> ToUserStatusInfo(IList<WorkingStatusData> currentWorkingStatuses, IEnumerable<WorkingStatusData> defaultWorkingStatuses)
