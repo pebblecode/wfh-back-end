@@ -4,8 +4,6 @@ using System.Web.Http;
 namespace WFHWeb.Controllers
 {
     using System.IO;
-
-    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
@@ -13,19 +11,21 @@ namespace WFHWeb.Controllers
     using System.Linq;
     using System.Net.Http;
     using System.Web;
-    using WFHWeb.DataModels;
-    using WFHWeb.Hubs;
-    using WFHWeb.Models;
-    using WFHWeb.Services;
+    using DataModels;
+    using Hubs;
+    using Models;
+    using Services;
 
     [RoutePrefix("api/statuses")]
     public class StatusesController : ApiController
     {
         private readonly string dataDir;
+        private IStatusService statusService;
 
         public StatusesController()
         {
             this.dataDir = HttpContext.Current.Server.MapPath("~/App_Data");
+            this.statusService = new FoldereBasedStatusService();
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace WFHWeb.Controllers
                 Email = userStatus.Email,
                 StatusDetails = userStatus.StatusDetails
             };
-            StatusService.Instance.SetStatus(this.dataDir, workingStatusData);
+            this.statusService.SetStatus(this.dataDir, workingStatusData);
             NotificationHub.NotifyUsers(GetUserStatusInfo());
 
             return this.Ok();
@@ -53,10 +53,7 @@ namespace WFHWeb.Controllers
 
         public List<UserStatusInfo> GetUserStatusInfo()
         {
-            IList<WorkingStatusData> currentWorkingStatuses = StatusService.Instance.GetAllStatuses(this.dataDir);
-            IList<WorkingStatusData> defaultWorkingStatuses = StatusService.Instance.GetAllStatuses(this.dataDir, true);
-
-            return ToUserStatusInfo(currentWorkingStatuses, defaultWorkingStatuses);
+            return statusService.GetAllStatuses(this.dataDir).Select(ToUserStatusInfo).ToList();
         }
 
         [HttpDelete]
@@ -71,26 +68,19 @@ namespace WFHWeb.Controllers
             return this.Ok();
         }
 
-        private static List<UserStatusInfo> ToUserStatusInfo(IList<WorkingStatusData> currentWorkingStatuses, IEnumerable<WorkingStatusData> defaultWorkingStatuses)
-        {
-            var updatedUsers = currentWorkingStatuses.Select(ws => ws.Email).ToList();
-            List<UserStatusInfo> userStatusInfos = currentWorkingStatuses.Select(ws => ToUserStatusInfo(ws, false)).ToList();
-            userStatusInfos.AddRange(defaultWorkingStatuses.Where(ws => !updatedUsers.Contains(ws.Email)).Select(ws => ToUserStatusInfo(ws, true)));
+        
 
-            return userStatusInfos;
-        }
-
-        private static UserStatusInfo ToUserStatusInfo(WorkingStatusData workingStatusData, bool isDefault)
+        private static UserStatusInfo ToUserStatusInfo(WorkingStatusInfo workingStatusData)
         {
             return new UserStatusInfo
             {
-                Email = workingStatusData.Email,
+                Email = workingStatusData.WorkingStatusData.Email,
                 Status = new StatusInfo
                 {
-                    StatusType = workingStatusData.StatusType,
-                    StatusDetails = workingStatusData.StatusDetails,
-                    InOffice = workingStatusData.StatusType == StatusType.WorkInOffice,
-                    Default = isDefault
+                    StatusType = workingStatusData.WorkingStatusData.StatusType,
+                    StatusDetails = workingStatusData.WorkingStatusData.StatusDetails,
+                    InOffice = workingStatusData.WorkingStatusData.StatusType== StatusType.WorkInOffice,
+                    Default = workingStatusData.IsDefault
                 }
             };
         }

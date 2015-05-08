@@ -118,6 +118,18 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="App_Data\default.json" />
+    <Content Include="App_Data\defaults\allan%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\andy.wardle%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\john%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\joe.fitter%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\jaz%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\james.wallace%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\ian.black%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\george%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\francesca%40pebbleit.com\init.json" />
+    <Content Include="App_Data\defaults\cheng%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\emma.nash%40pebblecode.com\init.json" />
+    <Content Include="App_Data\defaults\fergus%40pebblecode.com\init.json" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -140,6 +152,8 @@
     <Compile Include="Models\StatusInfo.cs" />
     <Compile Include="Models\UserStatusInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\FoldereBasedStatusService.cs" />
+    <Compile Include="Services\IStatusService.cs" />
     <Compile Include="Services\StatusService.cs" />
     <Compile Include="Models\UserStatus.cs" />
     <Compile Include="Startup.cs" />
