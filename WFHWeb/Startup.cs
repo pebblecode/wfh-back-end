@@ -16,6 +16,7 @@ namespace WFHWeb
         {
             var signalrConfig = new HubConfiguration();
 
+            app.UseCors(CorsOptions.AllowAll);
             app.MapSignalR(signalrConfig);
         }
     }
