@@ -51,7 +51,7 @@ namespace WFHWeb.Controllers
             return Ok(GetUserStatusInfo());
         }
 
-        private List<UserStatusInfo> GetUserStatusInfo()
+        public List<UserStatusInfo> GetUserStatusInfo()
         {
             IList<WorkingStatusData> currentWorkingStatuses = StatusService.Instance.GetAllStatuses(this.dataDir);
             IList<WorkingStatusData> defaultWorkingStatuses = StatusService.Instance.GetAllStatuses(this.dataDir, true);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Cors;
 using Owin;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace WFHWeb
             var signalrConfig = new HubConfiguration();
 
             app.MapSignalR(signalrConfig);
+            app.UseCors(CorsOptions.AllowAll);
         }
     }
 }
