@@ -82,8 +82,9 @@ namespace WFHWeb.Controllers
             var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("https://slack.com/api/");
             var response = await httpClient.GetAsync(string.Format("users.info?token={0}&&user={1}", token, userid));
+            var jsonBlob = await response.Content.ReadAsStringAsync();
 
-            return Ok(response);
+            return Ok(jsonBlob);
         }
     }
 }
