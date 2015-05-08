@@ -59,8 +59,9 @@ namespace WFHWeb.Controllers
 
         [HttpPost]
         [Route("Slack")]
-        public async Task<IHttpActionResult> SetStatusFromSlack([FromBody] string slackData)
+        public async Task<IHttpActionResult> SetStatusFromSlack()
         {
+            
             var foo = await this.Request.Content.ReadAsStringAsync();
             //Get Slack info
             //Get User Id
