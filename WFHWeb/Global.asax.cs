@@ -9,6 +9,8 @@ namespace WFHWeb
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            GlobalConfiguration.Configuration.EnableCors(cors);
         }
     }
 }
