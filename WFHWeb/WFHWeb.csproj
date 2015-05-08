@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="App_Start\GlobalConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DefaultsController.cs" />
     <Compile Include="Controllers\StatusesController.cs" />
     <Compile Include="DataModels\StatusType.cs" />
     <Compile Include="Global.asax.cs">

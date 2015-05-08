@@ -8,7 +8,6 @@
     using Newtonsoft.Json;
 
     using WFHWeb.DataModels;
-    using WFHWeb.Models;
 
     public class StatusService
     {
@@ -38,15 +37,15 @@
             }
         }
 
-        internal void SetStatus(string dataDir, WorkingStatusData workingStatus)
+        internal void SetStatus(string dataDir, WorkingStatusData workingStatus, bool defaultStatus = false)
         {
             lock (SyncRoot)
             {
-                string dataFile = GetCurrentFile(dataDir);
+                string dataFile = defaultStatus ? GetDefaultFile(dataDir) : GetCurrentFile(dataDir);
                 var workingStatuses = new List<WorkingStatusData>();
                 if (File.Exists(dataFile))
                 {
-                    workingStatuses = JsonConvert.DeserializeObject<List<WorkingStatusData>>(File.ReadAllText(dataDir));
+                    workingStatuses = JsonConvert.DeserializeObject<List<WorkingStatusData>>(File.ReadAllText(dataFile));
                 }
 
                 var existingStatus = workingStatuses.SingleOrDefault(ws => ws.Email == workingStatus.Email);
@@ -64,11 +63,11 @@
             }
         }
 
-        internal IList<WorkingStatusData> GetAllStatuses(string dataDir)
+        internal IList<WorkingStatusData> GetAllStatuses(string dataDir, bool defaultStatus = false)
         {
             lock (SyncRoot)
             {
-                string dataFile = GetCurrentFile(dataDir);
+                string dataFile = defaultStatus ? GetDefaultFile(dataDir) : GetCurrentFile(dataDir);
                 if (File.Exists(dataFile))
                 {
                     return JsonConvert.DeserializeObject<List<WorkingStatusData>>(File.ReadAllText(dataFile));
@@ -81,6 +80,11 @@
         private static string GetCurrentFile(string dataDir)
         {
             return Path.Combine(dataDir, string.Format("{0}.json", DateTime.UtcNow.ToString("yyyy-MM-dd")));
+        }
+
+        private static string GetDefaultFile(string dataDir)
+        {
+            return Path.Combine(dataDir, "default.json");
         }
     }
 }
