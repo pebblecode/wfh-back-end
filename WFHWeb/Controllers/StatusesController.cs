@@ -63,8 +63,12 @@ namespace WFHWeb.Controllers
         {
             
             var foo = await this.Request.Content.ReadAsStringAsync();
-            //Get Slack info
+            var slackData = HttpUtility.ParseQueryString(foo);
             //Get User Id
+            var userid = slackData["user_id"];
+            //Get Slack info
+
+
             //Get Status
             //Post Status
             //Return 
