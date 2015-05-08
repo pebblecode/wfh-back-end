@@ -3,6 +3,8 @@ using System.Web.Http;
 
 namespace WFHWeb.Controllers
 {
+    using System.IO;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
@@ -55,6 +57,18 @@ namespace WFHWeb.Controllers
             IList<WorkingStatusData> defaultWorkingStatuses = StatusService.Instance.GetAllStatuses(this.dataDir, true);
 
             return ToUserStatusInfo(currentWorkingStatuses, defaultWorkingStatuses);
+        }
+
+        [HttpDelete]
+        [Route("")]
+        public IHttpActionResult DeleteAll()
+        {
+            foreach (string file in Directory.GetFiles(this.dataDir, "*.json"))
+            {
+                File.Delete(file);
+            }
+
+            return this.Ok();
         }
 
         private static List<UserStatusInfo> ToUserStatusInfo(IList<WorkingStatusData> currentWorkingStatuses, IEnumerable<WorkingStatusData> defaultWorkingStatuses)
