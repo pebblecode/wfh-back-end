@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace WFHWeb.Controllers
 {
@@ -69,14 +70,20 @@ namespace WFHWeb.Controllers
 
         [HttpPost]
         [Route("Slack")]
-        public IHttpActionResult SetStatusFromSlack([FromBody] string slackData)
+        public async Task<IHttpActionResult> SetStatusFromSlack()
         {
-            //Get Slack info
+            
+            var foo = await this.Request.Content.ReadAsStringAsync();
+            var slackData = HttpUtility.ParseQueryString(foo);
             //Get User Id
+            var userid = slackData["user_id"];
+            //Get Slack info
+
+
             //Get Status
             //Post Status
             //Return 
-            return Ok(slackData);
+            return Ok(foo);
         }
     }
 }
