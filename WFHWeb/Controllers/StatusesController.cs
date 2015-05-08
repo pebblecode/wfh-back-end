@@ -17,5 +17,18 @@ namespace WFHWeb.Controllers
         {
             
         }
+
+
+        [HttpPost]
+        [Route("{Slack}")]
+        public IHttpActionResult SetStatusFromSlack([FromBody] string slackData)
+        {
+            //Get Slack info
+            //Get User Id
+            //Get Status
+            //Post Status
+            //Return 
+            return Ok(slackData);
+        }
     }
 }
