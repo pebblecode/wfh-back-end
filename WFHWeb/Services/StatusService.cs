@@ -7,7 +7,7 @@
 
     using Newtonsoft.Json;
 
-    using WFHWeb.DataModels;
+    using DataModels;
 
     public class StatusService
     {

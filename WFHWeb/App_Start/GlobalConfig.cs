@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace WFHWeb.App_Start
+﻿namespace WFHWeb
 {
+    using System.Collections.Generic;
     using System.Web.Http;
 
     using Newtonsoft.Json;
