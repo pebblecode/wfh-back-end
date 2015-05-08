@@ -51,7 +51,7 @@ namespace WFHWeb.Controllers
             return Ok(GetUserStatusInfo());
         }
 
-        private List<UserStatusInfo> GetUserStatusInfo()
+        public List<UserStatusInfo> GetUserStatusInfo()
         {
             return statusService.GetAllStatuses(this.dataDir).Select(ToUserStatusInfo).ToList();
         }
@@ -94,16 +94,30 @@ namespace WFHWeb.Controllers
             var foo = await this.Request.Content.ReadAsStringAsync();
             var slackData = HttpUtility.ParseQueryString(foo);
             var userid = slackData["user_id"];
+            var command = slackData["command"];
 
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://slack.com/api/");
+            var httpClient = new HttpClient {BaseAddress = new Uri("https://slack.com/api/")};
             var response = await httpClient.GetAsync(string.Format("users.info?token={0}&&user={1}", token, userid));
             var jsonBlob = JObject.Parse(await response.Content.ReadAsStringAsync());
             var email = (string)jsonBlob["user"]["profile"]["email"];
-            
-            this.SetStatus(StatusType.WorkOutOfOffice, new UserStatus { Email = email });
 
-            return Ok("Yo dawg, you're working from home");
+            switch (command)
+            {
+                case "/wfh": 
+                    this.SetStatus(StatusType.WorkOutOfOffice, new UserStatus { Email = email });
+                    return Ok("Yo dawg, you're working from home. No clean trousers again?");
+                case "/wfo":
+                    this.SetStatus(StatusType.WorkInOffice, new UserStatus {Email = email});
+                    return Ok("Yo dawg, you're working from the office, better bring a tie!");
+                default :
+                    return
+                        InternalServerError(
+                            new Exception(String.Format("The Command '{0}' is invalid, are you calling from slack?",
+                                command)));
+            }
+
+            
+
         }
     }
 }
