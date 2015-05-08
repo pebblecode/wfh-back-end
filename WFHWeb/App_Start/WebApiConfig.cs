@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
@@ -14,8 +12,6 @@ namespace WFHWeb
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -24,7 +20,7 @@ namespace WFHWeb
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional });
 
-            GlobalConfiguration.Configuration.Formatters.Insert(0, new TextMediaTypeFormatter());
+            GlobalConfig.ConfigJson(config);
         }
     }
 

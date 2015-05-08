@@ -1,7 +1,142 @@
 [
-  {
-    "Email": "joseph@pebblecode.com",
-    "StatusType": "WorkInOffice",
-    "StatusDetails": "Working in Switzerland for the week"
-  }
+    {
+        "Email": "alex@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "allan@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "andy.wardle@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "cheng@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "emma.nash@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "fergus@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "francesca@pebbleit.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "george@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "ian.black@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "james.wallace@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "jaz@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "joe.fitter@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "john@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "jonny@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "joseph@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "mark@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "martin.schinz@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "niall@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "paul@pebbleit.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "peter.tait@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "sam@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "saverio.castelli@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "simon.dickson@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "simon.white@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "tane.piper@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "toby@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "vincent@pebblecode.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    },
+    {
+        "Email": "will@pebbleit.com",
+        "StatusType": "WorkInOffice",
+        "StatusDetails": ""
+    }
 ]
