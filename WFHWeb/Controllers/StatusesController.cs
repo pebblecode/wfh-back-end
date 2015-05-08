@@ -3,10 +3,11 @@ using System.Web.Http;
 
 namespace WFHWeb.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Web;
-
     using WFHWeb.DataModels;
     using WFHWeb.Models;
     using WFHWeb.Services;
@@ -74,18 +75,18 @@ namespace WFHWeb.Controllers
         [Route("Slack")]
         public async Task<IHttpActionResult> SetStatusFromSlack()
         {
-            
+            // this is simon's token :)
+            var token = "xoxp-2165237499-2607133545-4790338792-f5ac10";
             var foo = await this.Request.Content.ReadAsStringAsync();
             var slackData = HttpUtility.ParseQueryString(foo);
-            //Get User Id
             var userid = slackData["user_id"];
-            //Get Slack info
 
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri("https://slack.com/api/");
+            var response = await httpClient.GetAsync(string.Format("users.info?token={0}&&user={1}", token, userid));
+            var jsonBlob = await response.Content.ReadAsStringAsync();
 
-            //Get Status
-            //Post Status
-            //Return 
-            return Ok(foo);
+            return Ok(jsonBlob);
         }
     }
 }
