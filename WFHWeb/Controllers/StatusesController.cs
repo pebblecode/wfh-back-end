@@ -60,12 +60,13 @@ namespace WFHWeb.Controllers
         [Route("Slack")]
         public IHttpActionResult SetStatusFromSlack([FromBody] string slackData)
         {
+            var foo = this.Request.Content.ReadAsStringAsync().Result;
             //Get Slack info
             //Get User Id
             //Get Status
             //Post Status
             //Return 
-            return Ok(slackData);
+            return Ok(foo);
         }
     }
 }
