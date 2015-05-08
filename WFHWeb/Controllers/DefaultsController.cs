@@ -12,10 +12,12 @@ namespace WFHWeb.Controllers
     public class DefaultsController : ApiController
     {
         private readonly string dataDir;
+        private IStatusService statusService;
 
         public DefaultsController()
         {
             this.dataDir = HttpContext.Current.Server.MapPath("~/App_Data");
+            this.statusService = new FoldereBasedStatusService();
         }
 
         [HttpPost]
@@ -28,7 +30,7 @@ namespace WFHWeb.Controllers
                 Email = userStatus.Email,
                 StatusDetails = userStatus.StatusDetails
             };
-            StatusService.Instance.SetStatus(this.dataDir, workingStatusData, true);
+            statusService.SetDefault(this.dataDir, workingStatusData);
 
             return this.Ok();
         }
