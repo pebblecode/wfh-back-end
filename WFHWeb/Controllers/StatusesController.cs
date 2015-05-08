@@ -90,7 +90,7 @@ namespace WFHWeb.Controllers
             this.SetStatus(StatusType.WorkOutOfOffice, new UserStatus { Email = email });
 
 
-            return Ok(jsonBlob);
+            return Ok("Yo dawg, you're working from home");
         }
     }
 }
