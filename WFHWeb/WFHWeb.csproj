@@ -104,6 +104,7 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="index.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
