@@ -1,10 +1,16 @@
 namespace PebbleCode.WFTFAIWFT.Api
 
 open System
+open System.Net
 open System.Net.Http
 open System.Web
 open System.Web.Http
 open System.Web.Routing
+
+type HomeController () =
+    inherit ApiController ()
+    member this.Get() =
+        this.Request.CreateResponse(HttpStatusCode.OK, "Ok from web api")
 
 type HttpRoute = {
     controller : string
