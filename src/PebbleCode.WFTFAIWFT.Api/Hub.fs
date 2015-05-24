@@ -10,7 +10,7 @@ open Microsoft.Owin.Cors
 type Startup () =
     member this.Configuration (app:IAppBuilder) =
         let rootFolder = @"C:\data"
-//        GlobalHost.DependencyResolver.Register(typeof<WfhHub>, fun () -> (new WfhHub() :> obj)) |> ignore
+        GlobalHost.DependencyResolver.Register(typeof<WfhHub>, fun () -> (new WfhHub(rootFolder) :> obj)) |> ignore
         app.Map(
             "/signalr",
             (fun appBuilder ->

@@ -235,9 +235,9 @@ type NotifyWorkFromHome =
 open Microsoft.AspNet.SignalR.Hubs
 open Microsoft.AspNet.SignalR
 
-type WfhHub () =
+type WfhHub (dataPath) =
     inherit Hub<NotifyWorkFromHome> ()
     member this.Send (message) =
         this.Clients.All.Update(message)
     member this.Initialize () =
-        InitializeHub.publishHistory @"C:\data" this.Clients.All.Update
+        InitializeHub.publishHistory dataPath this.Clients.All.Update
