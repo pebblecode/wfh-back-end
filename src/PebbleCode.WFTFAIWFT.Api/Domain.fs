@@ -167,6 +167,7 @@ module InitializeHub =
     let json = new JsonSerializer()
 
     let publishHistory rootFolderPath publish =
+
         let loadHistory (rootFolderPath) =
             let (|IsStatusChange|_|) (x:DomainEvent) =
                 match x with
@@ -183,27 +184,29 @@ module InitializeHub =
                 | true -> None
                 | false -> Some (latest changes)
 
+            let loadEventsForWorker workerFilePath =
+                use str = File.Open(workerFilePath, FileMode.Open, FileAccess.Read, FileShare.None)
+                use r = new StreamReader(str, Encoding.UTF8)
+                let events =
+                    [ while not r.EndOfStream do
+                            let l = r.ReadLine()
+                            yield JsonConvert.DeserializeObject<DomainEvent>(l) ]
+                    |> List.choose (function IsStatusChange x -> Some x | _ -> None)
+
+                let workerId = (events |> Seq.head).WorkerId
+                let latestDefault =
+                    events
+                    |> Seq.filter isDefault
+                    |> latestOrNone
+                let latestDaily =
+                    events
+                    |> Seq.filter (not << isDefault)
+                    |> latestOrNone
+                workerId, (latestDefault, latestDaily)
+
             Directory.GetFiles(rootFolderPath)
-            |> Seq.map (
-                fun workerFilePath ->
-                    use str = File.Open(workerFilePath, FileMode.Open, FileAccess.Read, FileShare.None)
-                    use r = new StreamReader(str, Encoding.UTF8)
-                    let events =
-                        [ while not r.EndOfStream do
-                                let l = r.ReadLine()
-                                yield JsonConvert.DeserializeObject<DomainEvent>(l) ]
-                        |> List.choose (function IsStatusChange x -> Some x | _ -> None)
-                    let workerId = (events |> Seq.head).WorkerId
-                    let latestDefault =
-                        events
-                        |> Seq.filter isDefault
-                        |> latestOrNone
-                    let latestDaily =
-                        events
-                        |> Seq.filter (not << isDefault)
-                        |> latestOrNone
-                    workerId, (latestDefault, latestDaily)
-                )
+            |> Seq.map loadEventsForWorker
+
         let chooseDefaultOrDaily (workerId,(def, daily)) =
             let currentDate = DateTimeOffset.UtcNow
             let appliesToday (date:DateTimeOffset) =
