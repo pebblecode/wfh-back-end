@@ -227,6 +227,7 @@ module InitializeHub =
 type NotifyWorkFromHome =
     interface
         abstract member Update : StatusChanged -> unit
+        abstract member Initialize : unit -> unit
     end
 
 open Microsoft.AspNet.SignalR.Hubs

@@ -5,12 +5,12 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFHWeb", "WFHWeb\WFHWeb.csproj", "{308A448C-3AC9-46C8-974C-0121AEAA6606}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "PebbleCode.WFTFAIWFT.Api", "PebbleCode.WFTFAIWFT.Api\PebbleCode.WFTFAIWFT.Api.fsproj", "{1B015158-88E4-411C-8654-2D57F1CB3CA1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6D86122C-5E5B-425F-A4F6-AC80729E1C1C}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "PebbleCode.WFTFAIWFT.Api", "src\PebbleCode.WFTFAIWFT.Api\PebbleCode.WFTFAIWFT.Api.fsproj", "{1B015158-88E4-411C-8654-2D57F1CB3CA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
