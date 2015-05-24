@@ -4,19 +4,12 @@ open FSharp.Interop.Dynamic
 open Microsoft.AspNet.SignalR
 open Microsoft.Owin
 open global.Owin
-
-type HollerMessage =
-    interface
-        abstract member SomethingHappened : string -> unit
-    end
-
-type ChatHub () =
-    inherit Hub<HollerMessage> ()
-    member this.Send (name, message) =
-        this.Clients.All.SomethingHappened(message)
+open PebbleCode.WTFAIWFT.Domain
 
 type Startup () =
     member this.Configuration (app:IAppBuilder) =
+        let rootFolder = @"C:\data"
+        GlobalHost.DependencyResolver.Register(typeof<WfhHub>, fun () -> (new WfhHub(rootFolder) :> obj)) |> ignore
         app.MapSignalR() |> ignore
 
 [<assembly: OwinStartup(typeof<Startup>)>]
