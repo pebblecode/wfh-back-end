@@ -182,16 +182,17 @@ module InitializeHub =
                 match Seq.isEmpty changes with
                 | true -> None
                 | false -> Some (latest changes)
+
             Directory.GetFiles(rootFolderPath)
             |> Seq.map (
                 fun workerFilePath ->
                     use str = File.Open(workerFilePath, FileMode.Open, FileAccess.Read, FileShare.None)
                     use r = new StreamReader(str, Encoding.UTF8)
                     let events =
-                        seq { while not r.EndOfStream do
+                        [ while not r.EndOfStream do
                                 let l = r.ReadLine()
-                                yield JsonConvert.DeserializeObject<DomainEvent>(l) }
-                        |> Seq.choose (function IsStatusChange x -> Some x | _ -> None)
+                                yield JsonConvert.DeserializeObject<DomainEvent>(l) ]
+                        |> List.choose (function IsStatusChange x -> Some x | _ -> None)
                     let workerId = (events |> Seq.head).WorkerId
                     let latestDefault =
                         events
@@ -221,7 +222,8 @@ module InitializeHub =
                     WorkerId = workerId
                     NewStatus = Default WorkingInOffice }
 
-        loadHistory rootFolderPath
+        let hist = loadHistory rootFolderPath |> List.ofSeq
+        hist
         |> Seq.iter (chooseDefaultOrDaily >> publish)
 
 type NotifyWorkFromHome =
@@ -233,9 +235,9 @@ type NotifyWorkFromHome =
 open Microsoft.AspNet.SignalR.Hubs
 open Microsoft.AspNet.SignalR
 
-type WfhHub (rootFolder) =
+type WfhHub () =
     inherit Hub<NotifyWorkFromHome> ()
     member this.Send (message) =
         this.Clients.All.Update(message)
     member this.Initialize () =
-        InitializeHub.publishHistory rootFolder this.Send
+        InitializeHub.publishHistory @"C:\data" this.Clients.All.Update
