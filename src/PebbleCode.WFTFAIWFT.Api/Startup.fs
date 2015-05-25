@@ -34,6 +34,7 @@ type Startup () =
         config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(StringEnumConverter())
 
     member this.Configuration (app:IAppBuilder) =
+
         let rootFolder = @"C:\data"
         GlobalHost.DependencyResolver.Register(typeof<WfhHub>, fun () -> (new WfhHub(rootFolder) :> obj)) |> ignore
         app.Map(
@@ -48,7 +49,8 @@ type Startup () =
             let publish eve = 
                 match eve with
                 | StatusChanged sc -> hub.Clients.All.Update sc
-            WorkerStatusAggregateRepository.createFilesystemRepository (@"C:\data", publish)
+            WorkerStatusAggregateRepository.createFilesystemRepository (rootFolder, publish)
+
         let builder = new ContainerBuilder()
         let config = new HttpConfiguration()
         builder.RegisterApiControllers(Assembly.GetExecutingAssembly()) |> ignore
