@@ -225,13 +225,27 @@ module InitializeHub =
                     WorkerId = workerId
                     NewStatus = Default WorkingInOffice }
 
-        let hist = loadHistory rootFolderPath |> List.ofSeq
+        let toDomainEvent (x : StatusChanged) = StatusChanged x
+
+        let hist =
+            loadHistory rootFolderPath
+            |> List.ofSeq
         hist
-        |> Seq.iter (chooseDefaultOrDaily >> publish)
+        |> Seq.iter (chooseDefaultOrDaily >> toDomainEvent >> publish)
+
+module EventBus =
+    open System.Reactive.Subjects
+    let liveSubject = new Subject<DomainEvent>()
+    let hot = liveSubject.Publish()
+    let sub =
+        liveSubject.Subscribe(
+            fun x ->
+                System.Diagnostics.Debug.WriteLine(x))
+    do hot.Connect() |> ignore
 
 type NotifyWorkFromHome =
     interface
-        abstract member Update : StatusChanged -> unit
+        abstract member Update : DomainEvent -> unit
         abstract member Initialize : unit -> unit
     end
 

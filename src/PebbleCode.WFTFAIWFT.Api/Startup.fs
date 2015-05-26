@@ -14,6 +14,7 @@ open Autofac.Integration.SignalR
 open System.Reflection
 open Microsoft.Owin.Host
 open System.Configuration
+open System.Reactive.Linq
 
 type HttpRoute =
     {   controller : string
@@ -27,19 +28,22 @@ with
         {   RootFolder = rootFolder}
 
 module Config =
-    let configureContainerBuilder (httpConfiguration, hubConfiguration) =
+    open Microsoft.AspNet.SignalR.Infrastructure
+
+    let configureContainerBuilder (httpConfiguration, hubConfiguration:HubConfiguration) =
         let builder = ContainerBuilder()
         builder.Register(fun context ->
             WfhConfig.readFromConfigurationManager ()).AsSelf().SingleInstance() |> ignore;
-        let createRepo rootFolder =
-            let hub = GlobalHost.ConnectionManager.GetHubContext<WfhHub, NotifyWorkFromHome>()
-            let publish eve = 
-                match eve with
-                | StatusChanged sc -> hub.Clients.All.Update sc
+        let createRepo rootFolder (connectionManager:IConnectionManager) =
+            let hub = connectionManager.GetHubContext<WfhHub, NotifyWorkFromHome>()
+            EventBus.hot.Subscribe(fun x -> hub.Clients.All.Update x) |> ignore
+            let publish eve = EventBus.liveSubject.OnNext(eve)
             WorkerStatusAggregateRepository.createFilesystemRepository (rootFolder, publish)
+
         builder.Register(fun ctx ->
             let config = ctx.Resolve<WfhConfig>()
-            createRepo config.RootFolder).AsSelf() |> ignore
+            let connectionManager = hubConfiguration.Resolver.Resolve<IConnectionManager>()
+            createRepo config.RootFolder connectionManager).AsSelf().SingleInstance() |> ignore
         builder.RegisterApiControllers(Assembly.GetExecutingAssembly()) |> ignore
         builder.RegisterWebApiFilterProvider(httpConfiguration)
         builder.RegisterHubs(Assembly.GetExecutingAssembly()) |> ignore
@@ -77,7 +81,7 @@ type Startup () =
             "/signalr",
             (fun appBuilder ->
             appBuilder.UseCors(CorsOptions.AllowAll) |> ignore
-            appBuilder.RunSignalR())
+            appBuilder.RunSignalR(hubConfiguration))
             ) |> ignore
         app.UseWebApi(httpConfiguration) |> ignore
 
